@@ -65,7 +65,7 @@ function SystemIcon() {
 
 export function FileManager({ onClose, zIndex, onFocus }: FileManagerProps) {
   const [selectedFile, setSelectedFile] = useState<string | null>(null)
-  const [currentPath, setCurrentPath] = useState("GioPrompt HD")
+  const [currentPath, setCurrentPath] = useState("Jacksongio HD")
   const [message, setMessage] = useState<string | null>(null)
 
   const files: FileItem[] = [
@@ -91,50 +91,42 @@ export function FileManager({ onClose, zIndex, onFocus }: FileManagerProps) {
       type: "file",
       size: "2 KB",
       action: () => {
-        setMessage("Welcome to GioPrompt!\n\nThis app was crafted with love and nostalgia for the classic Macintosh era.\n\nTips:\n- Try clicking 'Special' in the menu\n- Look for hidden icons on the desktop\n- The Coffee Break icon is pretty chill\n\nEnjoy!")
+        setMessage("Welcome to Jacksongio!\n\nThis app was crafted with love and nostalgia for the classic Macintosh era.\n\nTips:\n- Try clicking 'Special' in the menu\n- Look for hidden icons on the desktop\n- The Coffee Break icon is pretty chill\n\nEnjoy!")
       }
     },
     { 
-      name: "GioPrompt.app", 
+      name: "Jacksongio.app", 
       type: "app",
       size: "1.2 MB",
       action: () => {
-        setMessage("GioPrompt v1.0\n\nThe application is already running!\n\nMemory Used: 640 KB\n(Should be enough for anybody)")
+        setMessage("Jacksongio v1.0\n\nThe application is already running!\n\nMemory Used: 640 KB\n(Should be enough for anybody)")
       }
     },
     { 
-      name: "Export Prompts", 
+      name: "Export Notes", 
       type: "app",
       size: "128 KB",
       action: () => {
-        const content = `GioPrompt - Exported Prompts
+        const content = `Jacksongio - Personal Repository
 ==============================
 Date: ${new Date().toLocaleDateString()}
 Time: ${new Date().toLocaleTimeString()}
 
-Thank you for using GioPrompt!
+Thank you for visiting Jacksongio!
 
-Your optimized prompts would appear here.
-Visit the main window to create and optimize prompts.
+This is my personal repository and digital workspace.
 
-------------------------------
-Tips for better prompts:
-1. Be specific about what you want
-2. Include style references
-3. Mention technical requirements
-4. Describe mood and atmosphere
-
-GioPrompt System v1.0
-© 2026 GioPrompt Systems`
+Jacksongio System v1.0
+© 2026 Jacksongio`
         
         const blob = new Blob([content], { type: 'text/plain' })
         const url = URL.createObjectURL(blob)
         const a = document.createElement('a')
         a.href = url
-        a.download = 'gioprompt-export.txt'
+        a.download = 'jacksongio-notes.txt'
         a.click()
         URL.revokeObjectURL(url)
-        setMessage("File exported successfully!\n\nCheck your downloads folder for 'gioprompt-export.txt'")
+        setMessage("File exported successfully!\n\nCheck your downloads folder for 'jacksongio-notes.txt'")
       }
     },
     { 
@@ -159,7 +151,7 @@ GioPrompt System v1.0
     { 
       name: "..", 
       type: "folder",
-      action: () => setCurrentPath("GioPrompt HD")
+      action: () => setCurrentPath("Jacksongio HD")
     },
     { 
       name: "Calculator", 
@@ -184,19 +176,19 @@ GioPrompt System v1.0
     { 
       name: "..", 
       type: "folder",
-      action: () => setCurrentPath("GioPrompt HD")
+      action: () => setCurrentPath("Jacksongio HD")
     },
     { 
-      name: "my_first_prompt.txt", 
+      name: "my_first_note.txt", 
       type: "file",
       size: "1 KB",
-      action: () => setMessage("A cute cat sitting on a rainbow\n\n(Your first prompt - we all start somewhere!)")
+      action: () => setMessage("Welcome to my personal repository!\n\n(This is where I keep my notes and thoughts)")
     },
     { 
       name: "todo.txt", 
       type: "file",
       size: "512 B",
-      action: () => setMessage("TODO:\n\n[ ] Make better prompts\n[ ] Learn prompt engineering\n[x] Find this easter egg\n[ ] Touch grass")
+      action: () => setMessage("TODO:\n\n[ ] Explore more easter eggs\n[ ] Try the flying toasters\n[x] Find this secret file\n[ ] Touch grass")
     },
     { 
       name: "Notes", 

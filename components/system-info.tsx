@@ -39,7 +39,7 @@ export function SystemInfo({ onClose, zIndex, onFocus }: SystemInfoProps) {
 
   return (
     <MacWindow
-      title="About This GioPrompt"
+      title="About This Jacksongio"
       className="w-96"
       onClose={onClose}
       draggable
@@ -61,7 +61,7 @@ export function SystemInfo({ onClose, zIndex, onFocus }: SystemInfoProps) {
             </svg>
           </div>
           <div>
-            <h2 className="text-xl font-bold text-card-foreground">GioPrompt OS</h2>
+            <h2 className="text-xl font-bold text-card-foreground">Jacksongio OS</h2>
             <p className="text-sm text-muted-foreground">Version 1.0.26</p>
             <p className="text-sm text-muted-foreground">Build 2026.01.26</p>
           </div>
@@ -110,17 +110,17 @@ export function SystemInfo({ onClose, zIndex, onFocus }: SystemInfoProps) {
               />
             </div>
             <div className="flex justify-between text-card-foreground">
-              <span>Prompts Optimized:</span>
-              <span>Infinite</span>
+              <span>Files Accessed:</span>
+              <span>{Math.floor(Math.random() * 100) + 42}</span>
             </div>
           </div>
         </div>
 
         {/* Footer */}
         <div className="text-center text-sm text-muted-foreground border-t-2 border-border pt-3">
-          <p>GioPrompt Systems Inc.</p>
-          <p>"Making AI Prompts Great Since 2026"</p>
-          <p className="mt-2 text-xs">Serial: GP-2026-AWESOME-EDITION</p>
+          <p>Jacksongio Inc.</p>
+          <p>"Personal Repository"</p>
+          <p className="mt-2 text-xs">Serial: JG-2026-AWESOME-EDITION</p>
         </div>
       </div>
     </MacWindow>

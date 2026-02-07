@@ -4,27 +4,14 @@ import { useState, useCallback, useEffect } from "react"
 import { MenuBar } from "@/components/menu-bar"
 import { DesktopIcon } from "@/components/desktop-icon"
 import { MacWindow } from "@/components/mac-window"
-import { PromptOptimizerContent } from "@/components/prompt-optimizer"
 import { StyleEditor } from "@/components/style-editor"
 import { FlyingToasters } from "@/components/flying-toasters"
 import { FileManager } from "@/components/file-manager"
 import { SystemInfo } from "@/components/system-info"
 
-type WindowId = "optimizer" | "about" | "help" | "styleEditor" | "fileManager" | "systemInfo"
+type WindowId = "about" | "help" | "styleEditor" | "fileManager" | "systemInfo"
 
 // Pixel art style icons as SVG
-function PromptIcon() {
-  return (
-    <svg viewBox="0 0 32 32" className="w-full h-full">
-      <rect x="4" y="4" width="24" height="24" fill="#c0c0c0" stroke="#000" strokeWidth="2" />
-      <rect x="8" y="8" width="16" height="2" fill="#000" />
-      <rect x="8" y="12" width="12" height="2" fill="#000" />
-      <rect x="8" y="16" width="14" height="2" fill="#000" />
-      <rect x="8" y="20" width="10" height="2" fill="#000" />
-    </svg>
-  )
-}
-
 function AboutIcon() {
   return (
     <svg viewBox="0 0 32 32" className="w-full h-full">
@@ -120,7 +107,6 @@ function CoffeeIcon() {
 }
 
 export default function Home() {
-  const [showOptimizer, setShowOptimizer] = useState(true)
   const [showAbout, setShowAbout] = useState(false)
   const [showHelp, setShowHelp] = useState(false)
   const [showStyleEditor, setShowStyleEditor] = useState(false)
@@ -128,7 +114,7 @@ export default function Home() {
   const [showFileManager, setShowFileManager] = useState(false)
   const [showSystemInfo, setShowSystemInfo] = useState(false)
   const [selectedIcon, setSelectedIcon] = useState<string | null>(null)
-  const [windowOrder, setWindowOrder] = useState<WindowId[]>(["optimizer", "about", "help", "styleEditor", "fileManager", "systemInfo"])
+  const [windowOrder, setWindowOrder] = useState<WindowId[]>(["about", "help", "styleEditor", "fileManager", "systemInfo"])
   const [rightSideX, setRightSideX] = useState(1200)
   const [trashPosition, setTrashPosition] = useState({ x: 1200, y: 600 })
   const [bottomLeftPositions, setBottomLeftPositions] = useState({ 
@@ -152,9 +138,8 @@ export default function Home() {
   
   // Initialize icon positions with their snapped initial positions
   const [iconPositions, setIconPositions] = useState<Record<string, { x: number; y: number }>>(() => ({
-    prompt: snapToGrid(16, 16),
-    about: snapToGrid(16, 100),
-    help: snapToGrid(16, 184),
+    about: snapToGrid(16, 16),
+    help: snapToGrid(16, 100),
   }))
 
   useEffect(() => {
@@ -219,7 +204,7 @@ export default function Home() {
     <div className="h-screen w-screen flex flex-col bg-background overflow-hidden">
       {/* Menu Bar */}
       <MenuBar 
-        onGioPromptClick={() => {
+        onJacksongioClick={() => {
           setShowSystemInfo(true)
           bringToFront("systemInfo")
         }}
@@ -240,27 +225,12 @@ export default function Home() {
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <img 
             src="/gioprompt.png" 
-            alt="GioPrompt Logo" 
+            alt="Jacksongio Logo" 
             className="max-w-[40%] max-h-[40%] object-contain"
           />
         </div>
 
         {/* Desktop Icons - all draggable */}
-        <DesktopIcon
-          icon={<PromptIcon />}
-          label="GioPrompt"
-          selected={selectedIcon === "prompt"}
-          onClick={() => setSelectedIcon("prompt")}
-          onDoubleClick={() => {
-            setSelectedIcon("prompt")
-            setShowOptimizer(true)
-            bringToFront("optimizer")
-          }}
-          initialPosition={{ x: 16, y: 16 }}
-          iconId="prompt"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
         <DesktopIcon
           icon={<AboutIcon />}
           label="About"
@@ -271,7 +241,7 @@ export default function Home() {
             setShowAbout(true)
             bringToFront("about")
           }}
-          initialPosition={{ x: 16, y: 100 }}
+          initialPosition={{ x: 16, y: 16 }}
           iconId="about"
           occupiedPositions={iconPositions}
           onPositionChange={handleIconPositionChange}
@@ -286,7 +256,7 @@ export default function Home() {
             setShowHelp(true)
             bringToFront("help")
           }}
-          initialPosition={{ x: 16, y: 184 }}
+          initialPosition={{ x: 16, y: 100 }}
           iconId="help"
           occupiedPositions={iconPositions}
           onPositionChange={handleIconPositionChange}
@@ -397,26 +367,9 @@ export default function Home() {
         />
 
         {/* Draggable Windows */}
-        {showOptimizer && (
-          <MacWindow
-            title="GioPrompt v1.0 - Prompt Optimizer"
-            className="w-full sm:w-[calc(100vw-140px)] sm:max-w-[1400px]"
-            onClose={() => setShowOptimizer(false)}
-            draggable
-            resizable
-            initialPosition={{ x: 120, y: 60 }}
-            onFocus={() => bringToFront("optimizer")}
-            zIndex={getZIndex("optimizer")}
-            canMaximize
-            centerOnMount
-          >
-            <PromptOptimizerContent />
-          </MacWindow>
-        )}
-
         {showAbout && (
           <MacWindow
-            title="About GioPrompt"
+            title="About Jacksongio"
             className="w-full sm:w-80"
             onClose={() => setShowAbout(false)}
             draggable
@@ -429,17 +382,16 @@ export default function Home() {
               <div className="w-16 h-16 bg-primary border-2 border-border flex items-center justify-center">
                 <span className="text-3xl text-primary-foreground font-bold">G</span>
               </div>
-              <h2 className="text-2xl font-bold text-card-foreground">GioPrompt v1.0</h2>
+              <h2 className="text-2xl font-bold text-card-foreground">Jacksongio v1.0</h2>
               <p className="text-card-foreground">
-                The ultimate AI prompt optimization tool for the modern creative.
+                Personal Repository
               </p>
               <div className="border-t-2 border-border pt-4 w-full">
                 <p className="text-sm text-muted-foreground">
-                  Transform your basic prompts into powerful, optimized instructions
-                  tailored for video, text, image, code, and music generation.
+                  Welcome to my personal repository and digital workspace.
                 </p>
               </div>
-              <p className="text-sm text-muted-foreground">© 2026 GioPrompt Systems</p>
+              <p className="text-sm text-muted-foreground">© 2026 Jacksongio</p>
             </div>
           </MacWindow>
         )}
@@ -456,16 +408,16 @@ export default function Home() {
             canMaximize
           >
             <div className="flex flex-col gap-4 text-card-foreground">
-              <h3 className="text-xl font-bold border-b-2 border-border pb-2">How to Use GioPrompt</h3>
-              <ol className="list-decimal list-inside space-y-2">
-                <li>Select your generation type (Text, Image, Video, Code, or Music)</li>
-                <li>Enter your basic prompt in the input field</li>
-                <li>Click "Optimize Prompt" to transform it</li>
-                <li>Copy the optimized prompt to use with your AI tool</li>
-              </ol>
+              <h3 className="text-xl font-bold border-b-2 border-border pb-2">Welcome to Jacksongio</h3>
+              <p>This is a personal repository and digital workspace with a nostalgic Mac OS classic theme.</p>
               <div className="bg-secondary border-2 border-border p-3 mt-2">
-                <p className="font-bold">Pro Tip:</p>
-                <p className="text-sm">The more detail you provide in your original prompt, the better the optimized output will be!</p>
+                <p className="font-bold">Getting Started:</p>
+                <ul className="text-sm space-y-1 mt-2">
+                  <li>• Explore the desktop icons</li>
+                  <li>• Try clicking 'Special' in the menu</li>
+                  <li>• Look for hidden easter eggs</li>
+                  <li>• Drag windows around!</li>
+                </ul>
               </div>
             </div>
           </MacWindow>
@@ -499,7 +451,7 @@ export default function Home() {
       {/* Status Bar - Fixed at bottom */}
       <div className="flex-shrink-0 bg-card border-t-2 border-border px-4 py-1 flex items-center justify-between">
         <span className="text-card-foreground text-sm">Ready</span>
-        <span className="text-card-foreground text-sm">GioPrompt System v1.0</span>
+        <span className="text-card-foreground text-sm">Jacksongio System v1.0</span>
       </div>
 
       {/* Flying Toasters Easter Egg */}

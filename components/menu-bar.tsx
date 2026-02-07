@@ -3,13 +3,13 @@
 import { useState, useEffect } from "react"
 
 interface MenuBarProps {
-  onGioPromptClick?: () => void
+  onJacksongioClick?: () => void
   onFileClick?: () => void
   onEditClick?: () => void
   onSpecialClick?: () => void
 }
 
-export function MenuBar({ onGioPromptClick, onFileClick, onEditClick, onSpecialClick }: MenuBarProps) {
+export function MenuBar({ onJacksongioClick, onFileClick, onEditClick, onSpecialClick }: MenuBarProps) {
   const [time, setTime] = useState("")
 
   useEffect(() => {
@@ -26,10 +26,10 @@ export function MenuBar({ onGioPromptClick, onFileClick, onEditClick, onSpecialC
     <div className="flex items-center justify-between bg-card border-b-2 border-border px-3 py-1 flex-shrink-0 z-50">
       <div className="flex items-center gap-4">
         <button 
-          onClick={onGioPromptClick}
+          onClick={onJacksongioClick}
           className="font-bold text-lg border border-border px-2 bg-secondary text-card-foreground hover:bg-primary hover:text-primary-foreground cursor-pointer"
         >
-          GioPrompt
+          Jacksongio
         </button>
         <button 
           onClick={onFileClick}
