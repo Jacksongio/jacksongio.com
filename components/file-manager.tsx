@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { MacWindow } from "./mac-window"
 
 interface FileManagerProps {
@@ -11,10 +11,18 @@ interface FileManagerProps {
 
 interface FileItem {
   name: string
-  type: "folder" | "file" | "app" | "system"
+  type: "folder" | "file" | "app" | "system" | "link"
   size?: string
   action?: () => void
   message?: string
+  url?: string
+}
+
+interface Repository {
+  id: number
+  name: string
+  url: string
+  description: string
 }
 
 function FolderIcon() {
@@ -63,10 +71,31 @@ function SystemIcon() {
   )
 }
 
+function LinkIcon() {
+  return (
+    <svg viewBox="0 0 32 32" className="w-8 h-8">
+      <rect x="4" y="4" width="24" height="24" fill="#ffffff" stroke="#000" strokeWidth="2" />
+      <path d="M12 10 L12 16 M12 16 L16 16 M16 16 L16 22 M16 22 L20 22" stroke="#0066cc" strokeWidth="2" fill="none" />
+      <circle cx="12" cy="10" r="2" fill="#0066cc" />
+      <circle cx="16" cy="16" r="2" fill="#0066cc" />
+      <circle cx="20" cy="22" r="2" fill="#0066cc" />
+    </svg>
+  )
+}
+
 export function FileManager({ onClose, zIndex, onFocus }: FileManagerProps) {
   const [selectedFile, setSelectedFile] = useState<string | null>(null)
   const [currentPath, setCurrentPath] = useState("Jacksongio HD")
   const [message, setMessage] = useState<string | null>(null)
+  const [repositories, setRepositories] = useState<Repository[]>([])
+
+  // Load repositories from JSON file
+  useEffect(() => {
+    fetch('/github_repositories/repositories.json')
+      .then(res => res.json())
+      .then(data => setRepositories(data.repositories || []))
+      .catch(err => console.error('Failed to load repositories:', err))
+  }, [])
 
   const files: FileItem[] = [
     { 
@@ -85,6 +114,11 @@ export function FileManager({ onClose, zIndex, onFocus }: FileManagerProps) {
       name: "Documents", 
       type: "folder",
       action: () => setCurrentPath("Documents")
+    },
+    { 
+      name: "Github Repositories", 
+      type: "folder",
+      action: () => setCurrentPath("Github Repositories")
     },
     { 
       name: "Read Me First!", 
@@ -197,14 +231,37 @@ Jacksongio System v1.0
     },
   ]
 
+  // Github Repositories files - dynamically generated from JSON
+  const githubFiles: FileItem[] = [
+    { 
+      name: "..", 
+      type: "folder",
+      action: () => setCurrentPath("Jacksongio HD")
+    },
+    ...repositories
+      .filter(repo => repo.url) // Only show repos with URLs
+      .map(repo => ({
+        name: repo.name || `Repository ${repo.id}`,
+        type: "link" as const,
+        size: "Link",
+        action: () => {
+          if (repo.url) {
+            window.open(repo.url, "_blank")
+          }
+        }
+      }))
+  ]
+
   const currentFiles = currentPath === "Applications" ? applicationsFiles : 
-                       currentPath === "Documents" ? documentsFiles : files
+                       currentPath === "Documents" ? documentsFiles :
+                       currentPath === "Github Repositories" ? githubFiles : files
 
   const getIcon = (type: string) => {
     switch (type) {
       case "folder": return <FolderIcon />
       case "app": return <AppIcon />
       case "system": return <SystemIcon />
+      case "link": return <LinkIcon />
       default: return <FileIcon />
     }
   }

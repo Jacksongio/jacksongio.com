@@ -1,0 +1,112 @@
+{
+  "repositories": [
+    {
+      "id": 1,
+      "name": "jacksongio.com",
+      "url": "https://github.com/Jacksongio/jacksongio.com",
+      "description": ""
+    },
+    {
+      "id": 2,
+      "name": "GioPrompt",
+      "url": "https://github.com/Jacksongio/GioPrompt",
+      "description": ""
+    },
+    {
+      "id": 3,
+      "name": "ArcanAI",
+      "url": "https://github.com/Jacksongio/arcan_ai",
+      "description": ""
+    },
+    {
+      "id": 4,
+      "name": "Personal Website",
+      "url": "https://github.com/Jacksongio/personalWebsite",
+      "description": ""
+    },
+    {
+      "id": 5,
+      "name": "Jacksonisreallybored.xyz",
+      "url": "https://github.com/Jacksongio/jackson_is_bored",
+      "description": ""
+    },
+    {
+      "id": 6,
+      "name": "GioGPT",
+      "url": "https://github.com/Jacksongio/GioGPT",
+      "description": ""
+    },
+    {
+      "id": 7,
+      "name": "The Giordanos",
+      "url": "https://github.com/Jacksongio/the_giordanos",
+      "description": ""
+    },
+    {
+      "id": 8,
+      "name": "Fantasy Football AI",
+      "url": "https://github.com/Jacksongio/fantasy_football_ai",
+      "description": ""
+    },
+    {
+      "id": 9,
+      "name": "LLM fact maker",
+      "url": "https://github.com/Jacksongio/M4_llm_fact_maker",
+      "description": ""
+    },
+    {
+      "id": 10,
+      "name": "Eliza bot",
+      "url": "https://github.com/Jacksongio/eliza",
+      "description": ""
+    },
+    {
+      "id": 11,
+      "name": "FogReport.io",
+      "url": "https://github.com/Jacksongio/fogreport",
+      "description": ""
+    },
+    {
+      "id": 12,
+      "name": "CryptoAnalyzer",
+      "url": "https://github.com/Jacksongio/CryptoAnalyzer",
+      "description": ""
+    },
+    {
+      "id": 13,
+      "name": "Flappy Dad",
+      "url": "https://github.com/Jacksongio/flappyDad",
+      "description": ""
+    },
+    {
+      "id": 14,
+      "name": "miniZip",
+      "url": "https://github.com/Jacksongio/miniZip",
+      "description": ""
+    },
+    {
+      "id": 15,
+      "name": "White Wine and Claret",
+      "url": "https://github.com/Jacksongio/whitewine-claret",
+      "description": ""
+    },
+    {
+      "id": 16,
+      "name": "GioBlockchain",
+      "url": "https://github.com/Jacksongio/GioBlockchain",
+      "description": ""
+    },
+    {
+      "id": 17,
+      "name": "GioWorkout",
+      "url": "https://github.com/Jacksongio/GioWorkout",
+      "description": ""
+    },
+    {
+      "id": 18,
+      "name": "Giordano Family Website",
+      "url": "https://github.com/Jacksongio/giordano.us",
+      "description": ""
+    }
+  ]
+}

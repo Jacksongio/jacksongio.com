@@ -23,7 +23,7 @@ interface MacWindowProps {
 type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw' | null
 
 // MenuBar height constant (includes border)
-const MENU_BAR_HEIGHT = 42
+const MENU_BAR_HEIGHT = 0
 
 export function MacWindow({ 
   title, 
