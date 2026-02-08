@@ -23,7 +23,8 @@ interface MacWindowProps {
 type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw' | null
 
 // MenuBar height constant (includes border)
-const MENU_BAR_HEIGHT = 0
+const MENU_BAR_HEIGHT = 36
+const STATUS_BAR_HEIGHT = 32
 
 export function MacWindow({ 
   title, 
@@ -54,14 +55,10 @@ export function MacWindow({
   // Center window on mobile when it mounts or when switching to mobile
   // Also center on desktop if centerOnMount is true
   useEffect(() => {
-    if (isMobile && draggable) {
-      const centerX = (window.innerWidth - (windowRef.current?.offsetWidth || 0)) / 2
-      const centerY = (window.innerHeight - (windowRef.current?.offsetHeight || 0)) / 2
-      setPosition({
-        x: Math.max(8, centerX),
-        y: Math.max(MENU_BAR_HEIGHT + 8, centerY)
-      })
-    } else if (centerOnMount && !isMobile && windowRef.current) {
+    if (isMobile) {
+      // On mobile, windows should be fullscreen by default
+      setIsMaximized(true)
+    } else if (centerOnMount && windowRef.current) {
       // Center on desktop when centerOnMount is true, positioned higher
       const centerX = (window.innerWidth - windowRef.current.offsetWidth) / 2
       const centerY = (window.innerHeight - windowRef.current.offsetHeight) / 2 - 120
@@ -70,7 +67,25 @@ export function MacWindow({
         y: Math.max(MENU_BAR_HEIGHT, centerY)
       })
     }
-  }, [isMobile, draggable, centerOnMount])
+  }, [isMobile, centerOnMount])
+
+  // Handle viewport resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (!isMobile && !isMaximized && draggable) {
+        // Keep window within bounds on resize
+        const maxX = window.innerWidth - 200
+        const maxY = window.innerHeight - 200
+        setPosition(prev => ({
+          x: Math.max(0, Math.min(prev.x, maxX)),
+          y: Math.max(MENU_BAR_HEIGHT, Math.min(prev.y, maxY))
+        }))
+      }
+    }
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [isMobile, isMaximized, draggable])
 
   const handleMouseDown = useCallback((e: MouseEvent) => {
     if (!draggable || isMobile) return // Disable dragging on mobile
@@ -192,17 +207,15 @@ export function MacWindow({
       ref={windowRef}
       className={cn(
         "flex flex-col bg-card border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)]", 
-        resizable && !isMaximized && "min-w-[320px] min-h-[200px]",
-        draggable && "absolute",
+        resizable && !isMaximized && !isMobile && "min-w-[320px] min-h-[200px]",
+        draggable && !isMobile && "absolute",
         isDragging && "cursor-grabbing select-none",
         // Apply custom className only when not maximized
-        !isMaximized && className,
-        // Desktop maximized: fullscreen
-        isMaximized && !isMobile && `!fixed !w-screen !h-screen !left-0 !top-0`,
-        // Mobile-specific styles
-        isMobile && !isMaximized && `!fixed !w-[calc(100vw-16px)] !left-2`,
-        // Mobile maximized: true fullscreen
-        isMobile && isMaximized && `!fixed !w-screen !h-screen !left-0 !top-0 !border-0 !rounded-none`
+        !isMaximized && !isMobile && className,
+        // Desktop maximized: fullscreen minus menu bar and status bar
+        isMaximized && !isMobile && `!fixed !w-screen !left-0 !top-[${MENU_BAR_HEIGHT}px] !border-t-0`,
+        // Mobile-specific styles - always fullscreen
+        isMobile && `!fixed !w-screen !h-screen !left-0 !top-0 !border-0 !rounded-none !shadow-none`,
       )}
       style={{ 
         ...(maxHeight && !isMaximized && !isMobile ? { maxHeight } : {}),
@@ -215,18 +228,13 @@ export function MacWindow({
         ...(size.height > 0 && !isMaximized && !isMobile ? { height: size.height } : {}),
         ...(isMaximized && !isMobile ? { 
           zIndex: 9999,
-          top: 0,
+          top: MENU_BAR_HEIGHT,
           left: 0,
           width: '100vw',
-          height: '100vh',
-          maxHeight: '100vh'
+          height: `calc(100vh - ${MENU_BAR_HEIGHT + STATUS_BAR_HEIGHT}px)`,
+          maxHeight: `calc(100vh - ${MENU_BAR_HEIGHT + STATUS_BAR_HEIGHT}px)`
         } : {}),
-        ...(isMobile && !isMaximized ? { 
-          zIndex,
-          top: MENU_BAR_HEIGHT + 16,
-          height: `calc(100vh - ${MENU_BAR_HEIGHT + 48}px)`
-        } : {}),
-        ...(isMobile && isMaximized ? {
+        ...(isMobile ? {
           zIndex: 9999,
           top: 0,
           left: 0,
@@ -240,9 +248,10 @@ export function MacWindow({
       {/* Title Bar */}
       <div 
         className={cn(
-          "flex items-center justify-between bg-primary px-2 py-1 border-b-2 border-border flex-shrink-0",
+          "flex items-center justify-between bg-primary px-2 py-1 border-b-2 border-border flex-shrink-0 touch-none",
           draggable && !isMobile && "cursor-grab",
-          isDragging && "cursor-grabbing"
+          isDragging && "cursor-grabbing",
+          isMobile && "sticky top-0 z-10"
         )}
         onMouseDown={handleMouseDown}
       >
@@ -252,12 +261,12 @@ export function MacWindow({
               e.stopPropagation()
               onClose?.()
             }}
-            className="w-4 h-4 bg-card border border-border flex items-center justify-center hover:bg-secondary transition-colors"
+            className="w-4 h-4 bg-card border border-border flex items-center justify-center hover:bg-secondary transition-colors touch-manipulation"
             aria-label="Close window"
           >
             <span className="text-[10px] leading-none text-card-foreground">x</span>
           </button>
-          {canMaximize && (
+          {canMaximize && !isMobile && (
             <button
               onClick={handleMaximize}
               className="w-4 h-4 bg-card border border-border flex items-center justify-center hover:bg-secondary transition-colors"
@@ -267,13 +276,14 @@ export function MacWindow({
             </button>
           )}
         </div>
-        <span className="text-primary-foreground text-lg font-bold tracking-wide select-none">{title}</span>
+        <span className="text-primary-foreground text-lg font-bold tracking-wide select-none truncate px-2">{title}</span>
         <div className="w-16" />
       </div>
       {/* Content */}
       <div className={cn(
-        "flex-1 p-4 bg-card overflow-auto",
-        isMaximized && "!h-[calc(100vh-50px)]"
+        "flex-1 p-4 bg-card overflow-auto overscroll-contain",
+        isMaximized && !isMobile && `!h-[calc(100vh-${MENU_BAR_HEIGHT + STATUS_BAR_HEIGHT + 50}px)]`,
+        isMobile && "!h-[calc(100vh-50px)] pb-safe"
       )}>
         {children}
       </div>

@@ -187,6 +187,16 @@ export function DesktopIcon({
 
   const handleClick = (e: MouseEvent) => {
     if (hasMoved) return
+
+    // On mobile, single tap triggers the primary action directly
+    if (isMobile) {
+      if (onDoubleClick) {
+        onDoubleClick()
+      } else {
+        onClick?.()
+      }
+      return
+    }
     
     if (clickTimeout.current) {
       clearTimeout(clickTimeout.current)
@@ -223,7 +233,7 @@ export function DesktopIcon({
     </button>
   )
 
-  if (initialPosition) {
+  if (initialPosition && !isMobile) {
     const displayPos = isDragging ? dragPosition : position
     const isOccupied = isPositionOccupied(snapPreview)
     

@@ -8,6 +8,8 @@ import { StyleEditor } from "@/components/style-editor"
 import { FlyingToasters } from "@/components/flying-toasters"
 import { FileManager } from "@/components/file-manager"
 import { SystemInfo } from "@/components/system-info"
+import { useIsMobile } from "@/hooks/use-mobile"
+import { cn } from "@/lib/utils"
 
 type WindowId = "about" | "help" | "styleEditor" | "fileManager" | "systemInfo"
 
@@ -94,6 +96,21 @@ function SadMacIcon() {
   )
 }
 
+function ResumeIcon() {
+  return (
+    <svg viewBox="0 0 32 32" className="w-full h-full">
+      <rect x="6" y="2" width="20" height="28" fill="#fff" stroke="#000" strokeWidth="2" />
+      <rect x="8" y="4" width="16" height="2" fill="#000" />
+      <rect x="8" y="8" width="16" height="1" fill="#808080" />
+      <rect x="8" y="11" width="12" height="1" fill="#808080" />
+      <rect x="8" y="14" width="16" height="1" fill="#808080" />
+      <rect x="8" y="17" width="10" height="1" fill="#808080" />
+      <rect x="8" y="20" width="14" height="1" fill="#808080" />
+      <rect x="8" y="23" width="8" height="1" fill="#808080" />
+    </svg>
+  )
+}
+
 function CoffeeIcon() {
   return (
     <svg viewBox="0 0 32 32" className="w-full h-full">
@@ -107,6 +124,7 @@ function CoffeeIcon() {
 }
 
 export default function Home() {
+  const isMobile = useIsMobile()
   const [showAbout, setShowAbout] = useState(false)
   const [showHelp, setShowHelp] = useState(false)
   const [showStyleEditor, setShowStyleEditor] = useState(false)
@@ -150,6 +168,7 @@ export default function Home() {
     // Row 3
     whitewineandclaret: snapToGrid(16, 184),
     bored: snapToGrid(98, 184),
+    resume: snapToGrid(188, 184),
   }))
 
   useEffect(() => {
@@ -222,8 +241,8 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-background overflow-hidden">
-      {/* Menu Bar */}
+    <div className="h-screen w-screen flex flex-col bg-background">
+      {/* Menu Bar - Fixed height */}
       <MenuBar 
         onJacksongioClick={() => {
           setShowSystemInfo(true)
@@ -240,276 +259,302 @@ export default function Home() {
         onSpecialClick={() => setShowScreensaver(true)}
       />
 
-      {/* Desktop Area */}
-      <main className="flex-1 relative p-4 overflow-hidden">
-        {/* Background Logo */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <img 
-            src="/gioprompt.png" 
-            alt="Jacksongio Logo" 
-            className="max-w-[40%] max-h-[40%] object-contain"
+      {/* Desktop Area - Fills remaining space */}
+      <main className={cn(
+        "flex-1 min-h-0",
+        isMobile ? "overflow-y-auto p-3" : "relative p-4 overflow-hidden"
+      )}>
+        {/* Background Logo - desktop only */}
+        {!isMobile && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <img 
+              src="/gioprompt.png" 
+              alt="Jacksongio Logo" 
+              className="max-w-[40%] max-h-[40%] object-contain"
+            />
+          </div>
+        )}
+
+        {/* === Projects Section === */}
+        {isMobile && (
+          <p className="text-[11px] uppercase tracking-widest text-white font-semibold mb-1.5 px-1 border-b border-border/50 pb-1">Projects</p>
+        )}
+        <div className={cn(isMobile && "grid grid-cols-4 gap-0.5 justify-items-center mb-4")}>
+          <DesktopIcon
+            icon={<img src="/logos/arcan.png" alt="ArcanAI" className="w-full h-full object-contain" />}
+            label="ArcanAI"
+            selected={selectedIcon === "arcan"}
+            onClick={() => setSelectedIcon("arcan")}
+            onDoubleClick={() => {
+              setSelectedIcon("arcan")
+              window.open("https://apps.apple.com/us/app/arcanai/id6755493224", "_blank")
+            }}
+            initialPosition={{ x: 16, y: 16 }}
+            iconId="arcan"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<img src="/logos/giogpt.png" alt="GioGPT" className="w-full h-full object-contain" />}
+            label="GioGPT"
+            selected={selectedIcon === "giogpt"}
+            onClick={() => setSelectedIcon("giogpt")}
+            onDoubleClick={() => {
+              setSelectedIcon("giogpt")
+              window.open("https://giogpt.com", "_blank")
+            }}
+            initialPosition={{ x: 98, y: 16 }}
+            iconId="giogpt"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<img src="/logos/fogreport.png" alt="Fog Report" className="w-full h-full object-contain" />}
+            label="Fog Report"
+            selected={selectedIcon === "fogreport"}
+            onClick={() => setSelectedIcon("fogreport")}
+            onDoubleClick={() => {
+              setSelectedIcon("fogreport")
+              window.open("https://fogreport.io", "_blank")
+            }}
+            initialPosition={{ x: 188, y: 16 }}
+            iconId="fogreport"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<img src="/logos/gioprompt.png" alt="GioPrompt" className="w-full h-full object-contain" />}
+            label="GioPrompt"
+            selected={selectedIcon === "gioprompt"}
+            onClick={() => setSelectedIcon("gioprompt")}
+            onDoubleClick={() => {
+              setSelectedIcon("gioprompt")
+              window.open("https://gioprompt.com", "_blank")
+            }}
+            initialPosition={{ x: 16, y: 100 }}
+            iconId="gioprompt"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<img src="/logos/jacksongiordano.png" alt="Jackson Giordano" className="w-full h-full object-contain" />}
+            label="JacksonGio"
+            selected={selectedIcon === "jacksongiordano"}
+            onClick={() => setSelectedIcon("jacksongiordano")}
+            onDoubleClick={() => {
+              setSelectedIcon("jacksongiordano")
+              window.open("https://jacksongiordano.com", "_blank")
+            }}
+            initialPosition={{ x: 98, y: 100 }}
+            iconId="jacksongiordano"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<img src="/logos/thegiordanos.png" alt="The Giordanos" className="w-full h-full object-contain" />}
+            label="Giordanos"
+            selected={selectedIcon === "thegiordanos"}
+            onClick={() => setSelectedIcon("thegiordanos")}
+            onDoubleClick={() => {
+              setSelectedIcon("thegiordanos")
+              window.open("https://thegiordanos.net", "_blank")
+            }}
+            initialPosition={{ x: 188, y: 100 }}
+            iconId="thegiordanos"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<img src="/logos/Whitewineandclaret.png" alt="White Wine and Claret" className="w-full h-full object-contain" />}
+            label="Wine Blog"
+            selected={selectedIcon === "whitewineandclaret"}
+            onClick={() => setSelectedIcon("whitewineandclaret")}
+            onDoubleClick={() => {
+              setSelectedIcon("whitewineandclaret")
+              window.open("https://whitewineandclaret.com", "_blank")
+            }}
+            initialPosition={{ x: 16, y: 184 }}
+            iconId="whitewineandclaret"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<img src="/logos/bored.png" alt="Jackson is Bored" className="w-full h-full object-contain" />}
+            label="Bored"
+            selected={selectedIcon === "bored"}
+            onClick={() => setSelectedIcon("bored")}
+            onDoubleClick={() => {
+              setSelectedIcon("bored")
+              window.open("https://jacksonisreallybored.xyz", "_blank")
+            }}
+            initialPosition={{ x: 98, y: 184 }}
+            iconId="bored"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<ResumeIcon />}
+            label="Resume"
+            selected={selectedIcon === "resume"}
+            onClick={() => setSelectedIcon("resume")}
+            onDoubleClick={() => {
+              setSelectedIcon("resume")
+              window.open("https://github.com/Jacksongio/resume/blob/main/resume.pdf", "_blank")
+            }}
+            initialPosition={{ x: 188, y: 184 }}
+            iconId="resume"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
           />
         </div>
 
-        {/* Desktop Icons - all draggable */}
-        
-        {/* URL Link Icons - Top Left in 3 Columns */}
-        {/* Row 1 */}
-        <DesktopIcon
-          icon={<img src="/logos/arcan.png" alt="ArcanAI" className="w-full h-full object-contain" />}
-          label="ArcanAI"
-          selected={selectedIcon === "arcan"}
-          onClick={() => setSelectedIcon("arcan")}
-          onDoubleClick={() => {
-            setSelectedIcon("arcan")
-            window.open("https://apps.apple.com/us/app/arcanai/id6755493224", "_blank")
-          }}
-          initialPosition={{ x: 16, y: 16 }}
-          iconId="arcan"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-        <DesktopIcon
-          icon={<img src="/logos/giogpt.png" alt="GioGPT" className="w-full h-full object-contain" />}
-          label="GioGPT"
-          selected={selectedIcon === "giogpt"}
-          onClick={() => setSelectedIcon("giogpt")}
-          onDoubleClick={() => {
-            setSelectedIcon("giogpt")
-            window.open("https://giogpt.com", "_blank")
-          }}
-          initialPosition={{ x: 98, y: 16 }}
-          iconId="giogpt"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-        <DesktopIcon
-          icon={<img src="/logos/fogreport.png" alt="Fog Report" className="w-full h-full object-contain" />}
-          label="Fog Report"
-          selected={selectedIcon === "fogreport"}
-          onClick={() => setSelectedIcon("fogreport")}
-          onDoubleClick={() => {
-            setSelectedIcon("fogreport")
-            window.open("https://fogreport.io", "_blank")
-          }}
-          initialPosition={{ x: 188, y: 16 }}
-          iconId="fogreport"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-        
-        {/* Row 2 */}
-        <DesktopIcon
-          icon={<img src="/logos/gioprompt.png" alt="GioPrompt" className="w-full h-full object-contain" />}
-          label="GioPrompt"
-          selected={selectedIcon === "gioprompt"}
-          onClick={() => setSelectedIcon("gioprompt")}
-          onDoubleClick={() => {
-            setSelectedIcon("gioprompt")
-            window.open("https://gioprompt.com", "_blank")
-          }}
-          initialPosition={{ x: 16, y: 100 }}
-          iconId="gioprompt"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-        <DesktopIcon
-          icon={<img src="/logos/jacksongiordano.png" alt="Jackson Giordano" className="w-full h-full object-contain" />}
-          label="JacksonGio"
-          selected={selectedIcon === "jacksongiordano"}
-          onClick={() => setSelectedIcon("jacksongiordano")}
-          onDoubleClick={() => {
-            setSelectedIcon("jacksongiordano")
-            window.open("https://jacksongiordano.com", "_blank")
-          }}
-          initialPosition={{ x: 98, y: 100 }}
-          iconId="jacksongiordano"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-        <DesktopIcon
-          icon={<img src="/logos/thegiordanos.png" alt="The Giordanos" className="w-full h-full object-contain" />}
-          label="Giordanos"
-          selected={selectedIcon === "thegiordanos"}
-          onClick={() => setSelectedIcon("thegiordanos")}
-          onDoubleClick={() => {
-            setSelectedIcon("thegiordanos")
-            window.open("https://thegiordanos.net", "_blank")
-          }}
-          initialPosition={{ x: 188, y: 100 }}
-          iconId="thegiordanos"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-        
-        {/* Row 3 */}
-        <DesktopIcon
-          icon={<img src="/logos/Whitewineandclaret.png" alt="White Wine and Claret" className="w-full h-full object-contain" />}
-          label="Wine Blog"
-          selected={selectedIcon === "whitewineandclaret"}
-          onClick={() => setSelectedIcon("whitewineandclaret")}
-          onDoubleClick={() => {
-            setSelectedIcon("whitewineandclaret")
-            window.open("https://whitewineandclaret.com", "_blank")
-          }}
-          initialPosition={{ x: 16, y: 184 }}
-          iconId="whitewineandclaret"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-        <DesktopIcon
-          icon={<img src="/logos/bored.png" alt="Jackson is Bored" className="w-full h-full object-contain" />}
-          label="Bored"
-          selected={selectedIcon === "bored"}
-          onClick={() => setSelectedIcon("bored")}
-          onDoubleClick={() => {
-            setSelectedIcon("bored")
-            window.open("https://jacksonisreallybored.xyz", "_blank")
-          }}
-          initialPosition={{ x: 98, y: 184 }}
-          iconId="bored"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
+        {/* === System Section === */}
+        {isMobile && (
+          <p className="text-[11px] uppercase tracking-widest text-white font-semibold mb-1.5 px-1 border-b border-border/50 pb-1">System</p>
+        )}
+        <div className={cn(isMobile && "grid grid-cols-4 gap-0.5 justify-items-center mb-4")}>
+          <DesktopIcon
+            icon={<AboutIcon />}
+            label="About"
+            selected={selectedIcon === "about"}
+            onClick={() => setSelectedIcon("about")}
+            onDoubleClick={() => {
+              setSelectedIcon("about")
+              setShowAbout(true)
+              bringToFront("about")
+            }}
+            initialPosition={bottomLeftPositions.about}
+            iconId="about"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<HelpIcon />}
+            label="Help"
+            selected={selectedIcon === "help"}
+            onClick={() => setSelectedIcon("help")}
+            onDoubleClick={() => {
+              setSelectedIcon("help")
+              setShowHelp(true)
+              bringToFront("help")
+            }}
+            initialPosition={bottomLeftPositions.help}
+            iconId="help"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+        </div>
 
-        {/* System Icons - Bottom Left */}
-        <DesktopIcon
-          icon={<AboutIcon />}
-          label="About"
-          selected={selectedIcon === "about"}
-          onClick={() => setSelectedIcon("about")}
-          onDoubleClick={() => {
-            setSelectedIcon("about")
-            setShowAbout(true)
-            bringToFront("about")
-          }}
-          initialPosition={bottomLeftPositions.about}
-          iconId="about"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-        <DesktopIcon
-          icon={<HelpIcon />}
-          label="Help"
-          selected={selectedIcon === "help"}
-          onClick={() => setSelectedIcon("help")}
-          onDoubleClick={() => {
-            setSelectedIcon("help")
-            setShowHelp(true)
-            bringToFront("help")
-          }}
-          initialPosition={bottomLeftPositions.help}
-          iconId="help"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
+        {/* === Easter Eggs Section === */}
+        {isMobile && (
+          <p className="text-[11px] uppercase tracking-widest text-white font-semibold mb-1.5 px-1 border-b border-border/50 pb-1">Easter Eggs</p>
+        )}
+        <div className={cn(isMobile && "grid grid-cols-4 gap-0.5 justify-items-center mb-4")}>
+          <DesktopIcon
+            icon={<CoffeeIcon />}
+            label="Coffee Break"
+            selected={selectedIcon === "coffee"}
+            onClick={() => setSelectedIcon("coffee")}
+            onDoubleClick={() => {
+              setSelectedIcon("coffee")
+              document.body.style.filter = "sepia(0.5) brightness(1.1)"
+              setTimeout(() => {
+                document.body.style.filter = ""
+              }, 2000)
+            }}
+            initialPosition={{ x: rightSideX - 180, y: 16 }}
+            iconId="coffee"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<ToasterIcon />}
+            label="Toaster.app"
+            selected={selectedIcon === "toaster"}
+            onClick={() => setSelectedIcon("toaster")}
+            onDoubleClick={() => {
+              setSelectedIcon("toaster")
+              setShowScreensaver(true)
+            }}
+            initialPosition={{ x: rightSideX - 90, y: 16 }}
+            iconId="toaster"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<FloppyIcon />}
+            label="secrets.dat"
+            selected={selectedIcon === "floppy"}
+            onClick={() => setSelectedIcon("floppy")}
+            onDoubleClick={() => {
+              setSelectedIcon("floppy")
+              alert("[ DATA CORRUPTED ]\n\nJust kidding! Thanks for exploring.")
+            }}
+            initialPosition={{ x: rightSideX, y: 16 }}
+            iconId="floppy"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<SadMacIcon />}
+            label="System 404"
+            selected={selectedIcon === "sadmac"}
+            onClick={() => setSelectedIcon("sadmac")}
+            onDoubleClick={() => {
+              setSelectedIcon("sadmac")
+              const colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff"]
+              let i = 0
+              const interval = setInterval(() => {
+                document.body.style.backgroundColor = colors[i % colors.length]
+                i++
+                if (i > 10) {
+                  clearInterval(interval)
+                  document.body.style.backgroundColor = ""
+                }
+              }, 100)
+            }}
+            initialPosition={{ x: rightSideX - 90, y: 100 }}
+            iconId="sadmac"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+          <DesktopIcon
+            icon={<BombIcon />}
+            label="dont_click"
+            selected={selectedIcon === "bomb"}
+            onClick={() => setSelectedIcon("bomb")}
+            onDoubleClick={() => {
+              setSelectedIcon("bomb")
+              const el = document.documentElement
+              el.style.transition = "transform 0.5s"
+              el.style.transform = "rotate(2deg)"
+              setTimeout(() => {
+                el.style.transform = "rotate(-2deg)"
+              }, 500)
+              setTimeout(() => {
+                el.style.transform = "rotate(0deg)"
+              }, 1000)
+            }}
+            initialPosition={{ x: rightSideX, y: 100 }}
+            iconId="bomb"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+        </div>
 
-        {/* Easter Egg Icons - Top Right in 3 Columns */}
-        {/* Row 1 */}
-        <DesktopIcon
-          icon={<CoffeeIcon />}
-          label="Coffee Break"
-          selected={selectedIcon === "coffee"}
-          onClick={() => setSelectedIcon("coffee")}
-          onDoubleClick={() => {
-            setSelectedIcon("coffee")
-            document.body.style.filter = "sepia(0.5) brightness(1.1)"
-            setTimeout(() => {
-              document.body.style.filter = ""
-            }, 2000)
-          }}
-          initialPosition={{ x: rightSideX - 180, y: 16 }}
-          iconId="coffee"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-        <DesktopIcon
-          icon={<ToasterIcon />}
-          label="Toaster.app"
-          selected={selectedIcon === "toaster"}
-          onClick={() => setSelectedIcon("toaster")}
-          onDoubleClick={() => {
-            setSelectedIcon("toaster")
-            setShowScreensaver(true)
-          }}
-          initialPosition={{ x: rightSideX - 90, y: 16 }}
-          iconId="toaster"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-        <DesktopIcon
-          icon={<FloppyIcon />}
-          label="secrets.dat"
-          selected={selectedIcon === "floppy"}
-          onClick={() => setSelectedIcon("floppy")}
-          onDoubleClick={() => {
-            setSelectedIcon("floppy")
-            alert("[ DATA CORRUPTED ]\n\nJust kidding! Thanks for exploring.")
-          }}
-          initialPosition={{ x: rightSideX, y: 16 }}
-          iconId="floppy"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-        
-        {/* Row 2 */}
-        <DesktopIcon
-          icon={<SadMacIcon />}
-          label="System 404"
-          selected={selectedIcon === "sadmac"}
-          onClick={() => setSelectedIcon("sadmac")}
-          onDoubleClick={() => {
-            setSelectedIcon("sadmac")
-            const colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff"]
-            let i = 0
-            const interval = setInterval(() => {
-              document.body.style.backgroundColor = colors[i % colors.length]
-              i++
-              if (i > 10) {
-                clearInterval(interval)
-                document.body.style.backgroundColor = ""
-              }
-            }, 100)
-          }}
-          initialPosition={{ x: rightSideX - 90, y: 100 }}
-          iconId="sadmac"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-        <DesktopIcon
-          icon={<BombIcon />}
-          label="dont_click"
-          selected={selectedIcon === "bomb"}
-          onClick={() => setSelectedIcon("bomb")}
-          onDoubleClick={() => {
-            setSelectedIcon("bomb")
-            const el = document.documentElement
-            el.style.transition = "transform 0.5s"
-            el.style.transform = "rotate(2deg)"
-            setTimeout(() => {
-              el.style.transform = "rotate(-2deg)"
-            }, 500)
-            setTimeout(() => {
-              el.style.transform = "rotate(0deg)"
-            }, 1000)
-          }}
-          initialPosition={{ x: rightSideX, y: 100 }}
-          iconId="bomb"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
-
-        {/* Trash Icon - Bottom Right */}
-        <DesktopIcon
-          icon={<TrashIcon />}
-          label="Trash"
-          selected={selectedIcon === "trash"}
-          onClick={() => setSelectedIcon("trash")}
-          initialPosition={trashPosition}
-          iconId="trash"
-          occupiedPositions={iconPositions}
-          onPositionChange={handleIconPositionChange}
-        />
+        {/* === Trash Section === */}
+        <div className={cn(isMobile && "flex justify-end pr-2 mb-2")}>
+          <DesktopIcon
+            icon={<TrashIcon />}
+            label="Trash"
+            selected={selectedIcon === "trash"}
+            onClick={() => setSelectedIcon("trash")}
+            initialPosition={trashPosition}
+            iconId="trash"
+            occupiedPositions={iconPositions}
+            onPositionChange={handleIconPositionChange}
+          />
+        </div>
 
         {/* Draggable Windows */}
         {showAbout && (
@@ -599,10 +644,10 @@ export default function Home() {
         )}
       </main>
 
-      {/* Status Bar - Fixed at bottom */}
-      <div className="flex-shrink-0 bg-card border-t-2 border-border px-4 py-1 flex items-center justify-between">
-        <span className="text-card-foreground text-sm">Ready</span>
-        <span className="text-card-foreground text-sm">Jacksongio System v1.0</span>
+      {/* Status Bar - Fixed at bottom with explicit height */}
+      <div className="flex-shrink-0 h-8 bg-card border-t-2 border-border px-4 flex items-center justify-between">
+        <span className="text-card-foreground text-sm truncate">Ready</span>
+        <span className="text-card-foreground text-sm truncate">Jacksongio System v1.0</span>
       </div>
 
       {/* Flying Toasters Easter Egg */}
