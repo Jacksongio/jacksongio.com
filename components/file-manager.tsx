@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { MacWindow } from "./mac-window"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface FileManagerProps {
   onClose: () => void
@@ -84,10 +85,12 @@ function LinkIcon() {
 }
 
 export function FileManager({ onClose, zIndex, onFocus }: FileManagerProps) {
+  const isMobile = useIsMobile()
   const [selectedFile, setSelectedFile] = useState<string | null>(null)
   const [currentPath, setCurrentPath] = useState("Jacksongio HD")
   const [message, setMessage] = useState<string | null>(null)
   const [repositories, setRepositories] = useState<Repository[]>([])
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   // Load repositories from JSON file
   useEffect(() => {
@@ -256,6 +259,29 @@ Jacksongio System v1.0
                        currentPath === "Documents" ? documentsFiles :
                        currentPath === "Github Repositories" ? githubFiles : files
 
+  const handleFileClick = (file: FileItem) => {
+    // On mobile, single tap opens files directly
+    if (isMobile) {
+      setSelectedFile(file.name)
+      file.action?.()
+      return
+    }
+
+    // On desktop, use the existing click/double-click pattern
+    if (clickTimeoutRef.current) {
+      // Double click detected
+      clearTimeout(clickTimeoutRef.current)
+      clickTimeoutRef.current = null
+      file.action?.()
+    } else {
+      // First click - just select
+      setSelectedFile(file.name)
+      clickTimeoutRef.current = setTimeout(() => {
+        clickTimeoutRef.current = null
+      }, 250)
+    }
+  }
+
   const getIcon = (type: string) => {
     switch (type) {
       case "folder": return <FolderIcon />
@@ -304,8 +330,7 @@ Jacksongio System v1.0
                         ? "bg-primary text-primary-foreground" 
                         : "text-card-foreground hover:bg-secondary"
                     }`}
-                    onClick={() => setSelectedFile(file.name)}
-                    onDoubleClick={() => file.action?.()}
+                    onClick={() => handleFileClick(file)}
                   >
                     <td className="px-2 py-1">{getIcon(file.type)}</td>
                     <td className="px-2 py-1">{file.name}</td>
@@ -319,7 +344,7 @@ Jacksongio System v1.0
           {/* Status bar */}
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span>{currentFiles.length} items</span>
-            <span>Double-click to open</span>
+            <span>{isMobile ? "Tap to open" : "Double-click to open"}</span>
           </div>
         </div>
       </MacWindow>
