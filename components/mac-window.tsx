@@ -235,6 +235,7 @@ export function MacWindow({
           maxHeight: `calc(100vh - ${MENU_BAR_HEIGHT + STATUS_BAR_HEIGHT}px)`
         } : {}),
         ...(isMobile ? {
+          position: 'fixed' as const,
           zIndex: 9999,
           top: 0,
           left: 0,
