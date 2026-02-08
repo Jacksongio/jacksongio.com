@@ -251,10 +251,11 @@ export function MacWindow({
       {/* Title Bar */}
       <div 
         className={cn(
-          "flex items-center justify-between bg-primary border-b-2 border-border flex-shrink-0 touch-none",
-          draggable && !isMobile && "cursor-grab px-2 py-1",
+          "flex items-center justify-between bg-primary flex-shrink-0 touch-none",
+          !isMobile && "border-b-2 border-border px-2 py-1",
+          draggable && !isMobile && "cursor-grab",
           isDragging && "cursor-grabbing",
-          isMobile && "sticky top-0 z-10 px-3 py-2 h-12"
+          isMobile && "px-3 h-12"
         )}
         onMouseDown={handleMouseDown}
       >
