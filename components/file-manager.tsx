@@ -353,11 +353,11 @@ Jacksongio System v1.0
       {message && (
         <div 
           className="fixed inset-0 flex items-center justify-center bg-black/40"
-          style={{ zIndex: zIndex + 100 }}
+          style={{ zIndex: 10100 }}
           onClick={() => setMessage(null)}
         >
           <div 
-            className="bg-card border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)] max-w-md"
+            className="bg-card border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)] max-w-md mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="bg-primary px-2 py-1 border-b-2 border-border">

@@ -206,16 +206,13 @@ export function MacWindow({
     <div 
       ref={windowRef}
       className={cn(
-        "flex flex-col bg-card border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)]", 
+        "flex flex-col",
+        !isMobile && "bg-card border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)]", 
         resizable && !isMaximized && !isMobile && "min-w-[320px] min-h-[200px]",
         draggable && !isMobile && "absolute",
         isDragging && "cursor-grabbing select-none",
-        // Apply custom className only when not maximized
         !isMaximized && !isMobile && className,
-        // Desktop maximized: fullscreen minus menu bar and status bar
-        isMaximized && !isMobile && `!fixed !w-screen !left-0 !top-[${MENU_BAR_HEIGHT}px] !border-t-0`,
-        // Mobile-specific styles - always fullscreen
-        isMobile && `!fixed !w-screen !h-screen !left-0 !top-0 !border-0 !rounded-none !shadow-none`,
+        isMaximized && !isMobile && "fixed w-screen left-0 border-t-0",
       )}
       style={{ 
         ...(maxHeight && !isMaximized && !isMobile ? { maxHeight } : {}),
@@ -235,13 +232,18 @@ export function MacWindow({
           maxHeight: `calc(100vh - ${MENU_BAR_HEIGHT + STATUS_BAR_HEIGHT}px)`
         } : {}),
         ...(isMobile ? {
-          position: 'fixed' as const,
+          position: 'fixed',
           zIndex: 9999,
           top: 0,
           left: 0,
           width: '100vw',
-          height: '100vh',
-          maxHeight: '100vh'
+          height: '100dvh',
+          maxHeight: '100dvh',
+          margin: 0,
+          padding: 0,
+          border: 'none',
+          borderRadius: 0,
+          boxShadow: 'none',
         } : {})
       }}
       onClick={handleWindowClick}
@@ -290,11 +292,14 @@ export function MacWindow({
         <div className={isMobile ? "w-8" : "w-16"} />
       </div>
       {/* Content */}
-      <div className={cn(
-        "flex-1 bg-card overflow-auto overscroll-contain",
-        isMobile ? "p-3 !h-[calc(100vh-48px)]" : "p-4",
-        isMaximized && !isMobile && `!h-[calc(100vh-${MENU_BAR_HEIGHT + STATUS_BAR_HEIGHT + 50}px)]`
-      )}>
+      <div
+        className={cn(
+          "flex-1 bg-card overflow-auto overscroll-contain",
+          !isMobile && "p-4",
+          isMaximized && !isMobile && `!h-[calc(100vh-${MENU_BAR_HEIGHT + STATUS_BAR_HEIGHT + 50}px)]`
+        )}
+        style={isMobile ? { padding: 12, height: 'calc(100dvh - 48px)' } : undefined}
+      >
         {children}
       </div>
       {/* Resize Handles */}
