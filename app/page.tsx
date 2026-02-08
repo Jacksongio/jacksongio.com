@@ -279,7 +279,7 @@ export default function Home() {
         {isMobile && (
           <p className="text-[11px] uppercase tracking-widest text-white font-semibold mb-1.5 px-1 border-b border-border/50 pb-1">Projects</p>
         )}
-        <div className={cn(isMobile && "grid grid-cols-4 gap-0.5 justify-items-center mb-4")}>
+        <div className={cn(isMobile && "grid grid-cols-5 gap-0.5 justify-items-center mb-4")}>
           <DesktopIcon
             icon={<img src="/logos/arcan.png" alt="ArcanAI" className="w-full h-full object-contain" />}
             label="ArcanAI"
@@ -412,7 +412,7 @@ export default function Home() {
         {isMobile && (
           <p className="text-[11px] uppercase tracking-widest text-white font-semibold mb-1.5 px-1 border-b border-border/50 pb-1">System</p>
         )}
-        <div className={cn(isMobile && "grid grid-cols-4 gap-0.5 justify-items-center mb-4")}>
+        <div className={cn(isMobile && "grid grid-cols-5 gap-0.5 justify-items-center mb-4")}>
           <DesktopIcon
             icon={<AboutIcon />}
             label="About"
@@ -449,7 +449,7 @@ export default function Home() {
         {isMobile && (
           <p className="text-[11px] uppercase tracking-widest text-white font-semibold mb-1.5 px-1 border-b border-border/50 pb-1">Easter Eggs</p>
         )}
-        <div className={cn(isMobile && "grid grid-cols-4 gap-0.5 justify-items-center mb-4")}>
+        <div className={cn(isMobile && "grid grid-cols-5 gap-0.5 justify-items-center mb-4")}>
           <DesktopIcon
             icon={<CoffeeIcon />}
             label="Coffee Break"

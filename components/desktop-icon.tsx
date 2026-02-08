@@ -215,17 +215,22 @@ export function DesktopIcon({
       onClick={handleClick}
       onMouseDown={handleMouseDown}
       className={cn(
-        "flex flex-col items-center gap-1 p-2 w-20 text-center cursor-pointer transition-colors",
+        "flex flex-col items-center gap-1 text-center cursor-pointer transition-colors",
+        isMobile ? "p-1 w-16" : "p-2 w-20",
         selected ? "bg-primary" : "hover:bg-primary/20",
         isDragging && "opacity-70 cursor-grabbing",
         className
       )}
     >
-      <div className="w-12 h-12 flex items-center justify-center text-foreground">
+      <div className={cn(
+        "flex items-center justify-center text-foreground",
+        isMobile ? "w-10 h-10" : "w-12 h-12"
+      )}>
         {icon}
       </div>
       <span className={cn(
-        "text-sm leading-tight break-words select-none",
+        "leading-tight break-words select-none",
+        isMobile ? "text-[10px]" : "text-sm",
         selected ? "text-primary-foreground bg-primary px-1" : "text-foreground"
       )}>
         {label}

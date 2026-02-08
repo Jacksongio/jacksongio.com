@@ -248,10 +248,10 @@ export function MacWindow({
       {/* Title Bar */}
       <div 
         className={cn(
-          "flex items-center justify-between bg-primary px-2 py-1 border-b-2 border-border flex-shrink-0 touch-none",
-          draggable && !isMobile && "cursor-grab",
+          "flex items-center justify-between bg-primary border-b-2 border-border flex-shrink-0 touch-none",
+          draggable && !isMobile && "cursor-grab px-2 py-1",
           isDragging && "cursor-grabbing",
-          isMobile && "sticky top-0 z-10"
+          isMobile && "sticky top-0 z-10 px-3 py-2 h-12"
         )}
         onMouseDown={handleMouseDown}
       >
@@ -261,10 +261,16 @@ export function MacWindow({
               e.stopPropagation()
               onClose?.()
             }}
-            className="w-4 h-4 bg-card border border-border flex items-center justify-center hover:bg-secondary transition-colors touch-manipulation"
+            className={cn(
+              "bg-card border border-border flex items-center justify-center hover:bg-secondary transition-colors touch-manipulation",
+              isMobile ? "w-6 h-6" : "w-4 h-4"
+            )}
             aria-label="Close window"
           >
-            <span className="text-[10px] leading-none text-card-foreground">x</span>
+            <span className={cn(
+              "leading-none text-card-foreground font-bold",
+              isMobile ? "text-sm" : "text-[10px]"
+            )}>×</span>
           </button>
           {canMaximize && !isMobile && (
             <button
@@ -276,14 +282,17 @@ export function MacWindow({
             </button>
           )}
         </div>
-        <span className="text-primary-foreground text-lg font-bold tracking-wide select-none truncate px-2">{title}</span>
-        <div className="w-16" />
+        <span className={cn(
+          "text-primary-foreground font-bold tracking-wide select-none truncate flex-1 text-center",
+          isMobile ? "text-base" : "text-lg px-2"
+        )}>{title}</span>
+        <div className={isMobile ? "w-8" : "w-16"} />
       </div>
       {/* Content */}
       <div className={cn(
-        "flex-1 p-4 bg-card overflow-auto overscroll-contain",
-        isMaximized && !isMobile && `!h-[calc(100vh-${MENU_BAR_HEIGHT + STATUS_BAR_HEIGHT + 50}px)]`,
-        isMobile && "!h-[calc(100vh-50px)] pb-safe"
+        "flex-1 bg-card overflow-auto overscroll-contain",
+        isMobile ? "p-3 !h-[calc(100vh-48px)]" : "p-4",
+        isMaximized && !isMobile && `!h-[calc(100vh-${MENU_BAR_HEIGHT + STATUS_BAR_HEIGHT + 50}px)]`
       )}>
         {children}
       </div>
