@@ -240,6 +240,15 @@ export default function Home() {
     }))
   }, [])
 
+  const handleDesktopClick = useCallback(() => {
+    setShowAbout(false)
+    setShowHelp(false)
+    setShowStyleEditor(false)
+    setShowFileManager(false)
+    setShowSystemInfo(false)
+    setSelectedIcon(null)
+  }, [])
+
   return (
     <div className="h-screen w-screen flex flex-col bg-background">
       {/* Menu Bar - Fixed height */}
@@ -259,11 +268,14 @@ export default function Home() {
         onSpecialClick={() => setShowScreensaver(true)}
       />
 
-      {/* Desktop Area - Fills remaining space */}
-      <main className={cn(
-        "flex-1 min-h-0",
-        isMobile ? "overflow-y-auto p-3" : "relative p-4 overflow-hidden"
-      )}>
+      {/* Desktop Area - Fills remaining space; click background to close all windows */}
+      <main
+        className={cn(
+          "flex-1 min-h-0",
+          isMobile ? "overflow-y-auto p-3" : "relative p-4 overflow-hidden"
+        )}
+        onClick={handleDesktopClick}
+      >
         {/* Background Logo - desktop only */}
         {!isMobile && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -310,7 +322,7 @@ export default function Home() {
           />
           <DesktopIcon
             icon={<img src="/logos/fogreport.png" alt="Fog Report" className="w-full h-full object-contain" />}
-            label="Fog Report"
+            label="FogReport.io"
             selected={selectedIcon === "fogreport"}
             onClick={() => setSelectedIcon("fogreport")}
             onDoubleClick={() => {
@@ -352,7 +364,7 @@ export default function Home() {
           />
           <DesktopIcon
             icon={<img src="/logos/thegiordanos.png" alt="The Giordanos" className="w-full h-full object-contain" />}
-            label="Giordanos"
+            label="Wedding"
             selected={selectedIcon === "thegiordanos"}
             onClick={() => setSelectedIcon("thegiordanos")}
             onDoubleClick={() => {
@@ -366,7 +378,7 @@ export default function Home() {
           />
           <DesktopIcon
             icon={<img src="/logos/Whitewineandclaret.png" alt="White Wine and Claret" className="w-full h-full object-contain" />}
-            label="Wine Blog"
+            label="WW&C"
             selected={selectedIcon === "whitewineandclaret"}
             onClick={() => setSelectedIcon("whitewineandclaret")}
             onDoubleClick={() => {
@@ -380,7 +392,7 @@ export default function Home() {
           />
           <DesktopIcon
             icon={<img src="/logos/bored.png" alt="Jackson is Bored" className="w-full h-full object-contain" />}
-            label="Bored"
+            label="Hobby"
             selected={selectedIcon === "bored"}
             onClick={() => setSelectedIcon("bored")}
             onDoubleClick={() => {

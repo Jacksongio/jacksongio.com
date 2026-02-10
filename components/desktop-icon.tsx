@@ -186,6 +186,7 @@ export function DesktopIcon({
   }, [draggable, initialPosition, position, isPositionOccupied, iconId, onPositionChange, isMobile])
 
   const handleClick = (e: MouseEvent) => {
+    e.stopPropagation()
     if (hasMoved) return
 
     // On mobile, single tap triggers the primary action directly

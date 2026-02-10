@@ -246,7 +246,10 @@ export function MacWindow({
           boxShadow: 'none',
         } : {})
       }}
-      onClick={handleWindowClick}
+      onClick={(e) => {
+        e.stopPropagation()
+        onFocus?.()
+      }}
     >
       {/* Title Bar */}
       <div 
