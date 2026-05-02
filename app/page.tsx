@@ -324,7 +324,7 @@ export default function Home() {
           />
           <DesktopIcon
             icon={<img src="/logos/fogreport.png" alt="Fog Report" className="w-full h-full object-contain" />}
-            label="FogReport.io — in progress currently"
+            label="FogReport.io"
             selected={selectedIcon === "fogreport"}
             onClick={() => setSelectedIcon("fogreport")}
             onDoubleClick={() => {
