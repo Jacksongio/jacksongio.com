@@ -131,6 +131,7 @@ export default function Home() {
   const [showScreensaver, setShowScreensaver] = useState(false)
   const [showFileManager, setShowFileManager] = useState(false)
   const [showSystemInfo, setShowSystemInfo] = useState(false)
+  const [showProjectNotice, setShowProjectNotice] = useState(true)
   const [selectedIcon, setSelectedIcon] = useState<string | null>(null)
   const [windowOrder, setWindowOrder] = useState<WindowId[]>(["about", "help", "styleEditor", "fileManager", "systemInfo"])
   const [rightSideX, setRightSideX] = useState(1200)
@@ -246,6 +247,7 @@ export default function Home() {
     setShowStyleEditor(false)
     setShowFileManager(false)
     setShowSystemInfo(false)
+    setShowProjectNotice(false)
     setSelectedIcon(null)
   }, [])
 
@@ -299,7 +301,7 @@ export default function Home() {
             onClick={() => setSelectedIcon("arcan")}
             onDoubleClick={() => {
               setSelectedIcon("arcan")
-              window.open("https://apps.apple.com/us/app/arcanai/id6755493224", "_blank")
+              window.open("https://github.com/jacksongio/arcan_ai", "_blank")
             }}
             initialPosition={{ x: 16, y: 16 }}
             iconId="arcan"
@@ -313,7 +315,7 @@ export default function Home() {
             onClick={() => setSelectedIcon("giogpt")}
             onDoubleClick={() => {
               setSelectedIcon("giogpt")
-              window.open("https://giogpt.com", "_blank")
+              window.open("https://github.com/jacksongio/GioGPT", "_blank")
             }}
             initialPosition={{ x: 98, y: 16 }}
             iconId="giogpt"
@@ -322,12 +324,12 @@ export default function Home() {
           />
           <DesktopIcon
             icon={<img src="/logos/fogreport.png" alt="Fog Report" className="w-full h-full object-contain" />}
-            label="FogReport.io"
+            label="FogReport.io — in progress currently"
             selected={selectedIcon === "fogreport"}
             onClick={() => setSelectedIcon("fogreport")}
             onDoubleClick={() => {
               setSelectedIcon("fogreport")
-              window.open("https://fogreport.io", "_blank")
+              window.open("https://github.com/jacksongio/fogreport", "_blank")
             }}
             initialPosition={{ x: 188, y: 16 }}
             iconId="fogreport"
@@ -341,7 +343,7 @@ export default function Home() {
             onClick={() => setSelectedIcon("gioprompt")}
             onDoubleClick={() => {
               setSelectedIcon("gioprompt")
-              window.open("https://gioprompt.com", "_blank")
+              window.open("https://github.com/jacksongio/GioPrompt", "_blank")
             }}
             initialPosition={{ x: 16, y: 100 }}
             iconId="gioprompt"
@@ -397,7 +399,7 @@ export default function Home() {
             onClick={() => setSelectedIcon("bored")}
             onDoubleClick={() => {
               setSelectedIcon("bored")
-              window.open("https://jacksonisreallybored.xyz", "_blank")
+              window.open("https://github.com/jacksongio/jackson_is_bored", "_blank")
             }}
             initialPosition={{ x: 98, y: 184 }}
             iconId="bored"
@@ -569,6 +571,39 @@ export default function Home() {
         </div>
 
         {/* Draggable Windows */}
+        {showProjectNotice && (
+          <MacWindow
+            title="Project update"
+            className="w-full max-w-lg sm:max-w-xl"
+            onClose={() => setShowProjectNotice(false)}
+            draggable
+            centerOnMount
+            initialPosition={{ x: 160, y: 90 }}
+            zIndex={10050}
+            canMaximize
+          >
+            <div className="flex flex-col gap-3 text-card-foreground text-sm leading-relaxed text-left">
+              <p>
+                Deployed versions of my projects are undergoing refactoring while I pivot toward
+                production-level work. Past source code remains available on GitHub; double-click
+                the project icons below to open each repository.
+              </p>
+              <div className="bg-secondary border-2 border-border p-3">
+                <p className="font-bold mb-2">Active refactor</p>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>FogReport.io (in progress currently)</li>
+                  <li>ArcanAI</li>
+                  <li>Wedding website</li>
+                </ul>
+              </div>
+              <p>
+                All other desktop projects are deprecated as live products; their repositories
+                stay public for reference.
+              </p>
+            </div>
+          </MacWindow>
+        )}
+
         {showAbout && (
           <MacWindow
             title="About Jacksongio"
