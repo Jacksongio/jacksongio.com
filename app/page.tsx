@@ -329,7 +329,7 @@ export default function Home() {
             onClick={() => setSelectedIcon("fogreport")}
             onDoubleClick={() => {
               setSelectedIcon("fogreport")
-              window.open("https://github.com/jacksongio/fogreport", "_blank")
+              window.open("https://fogreport.io", "_blank")
             }}
             initialPosition={{ x: 188, y: 16 }}
             iconId="fogreport"
@@ -591,8 +591,8 @@ export default function Home() {
               <div className="bg-secondary border-2 border-border p-3">
                 <p className="font-bold mb-2">Active refactor</p>
                 <ul className="list-disc pl-5 space-y-1">
-                  <li>FogReport.io (in progress currently)</li>
-                  <li>ArcanAI</li>
+                  <li>FogReport.io (completed)</li>
+                  <li>ArcanAI (in progress)</li>
                   <li>Wedding website</li>
                 </ul>
               </div>
